@@ -2,7 +2,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import {
   Button,
   Card,
-  CardActions,
   CardContent,
   InputAdornment,
   Stack,
@@ -44,68 +43,84 @@ function Item({
   return (
     <Card variant="outlined">
       <CardContent>
-        <Stack direction={"column"} spacing={2}>
-          <TextField fullWidth id={nameInputId} label="Nome do produto" />
-
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+        <Stack
+          spacing={1}
+          sx={{
+            alignItems: "flex-end",
+          }}
+        >
+          <Stack direction={"column"} spacing={1.5} sx={{ width: 1 }}>
             <TextField
+              size="small"
               fullWidth
-              value={amountInput}
-              onChange={(e) => onUpdateAmount(e.target.value)}
-              id={weightInputId}
-              label="Peso (em quilos)"
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="start">Kg</InputAdornment>
-                  ),
-                },
-              }}
+              id={nameInputId}
+              label="Nome do produto"
             />
 
+            <Stack direction="row" spacing={0.5}>
+              <TextField
+                type="number"
+                size="small"
+                fullWidth
+                value={amountInput}
+                onChange={(e) => onUpdateAmount(e.target.value)}
+                id={weightInputId}
+                label="Peso"
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="start">Kg</InputAdornment>
+                    ),
+                  },
+                }}
+              />
+
+              <TextField
+                type="number"
+                size="small"
+                fullWidth
+                value={priceInput}
+                onChange={(e) => onUpdatePrice(e.target.value)}
+                id={priceInputId}
+                label="Preço"
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">R$</InputAdornment>
+                    ),
+                  },
+                }}
+              />
+            </Stack>
+
             <TextField
+              size="small"
               fullWidth
-              value={priceInput}
-              onChange={(e) => onUpdatePrice(e.target.value)}
-              id={priceInputId}
-              label="Preço"
+              value={getRatio()}
+              id={ratioInputId}
+              disabled
+              label="Preço por quilo"
               slotProps={{
                 input: {
                   startAdornment: (
                     <InputAdornment position="start">R$</InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">/Kg</InputAdornment>
                   ),
                 },
               }}
             />
           </Stack>
 
-          <TextField
-            fullWidth
-            value={getRatio()}
-            id={ratioInputId}
-            disabled
-            label="Preço por quilo"
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">R$</InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">/Kg</InputAdornment>
-                ),
-              },
-            }}
-          />
-
-          <CardActions>
-            <Button
-              onClick={onRemoveItem}
-              startIcon={<CloseIcon />}
-              color="error"
-            >
-              Remover item
-            </Button>
-          </CardActions>
+          <Button
+            size="small"
+            onClick={onRemoveItem}
+            startIcon={<CloseIcon />}
+            color="error"
+          >
+            Remover item
+          </Button>
         </Stack>
       </CardContent>
     </Card>

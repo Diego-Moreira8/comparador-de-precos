@@ -112,9 +112,14 @@ function App() {
         </Stack>
       </AppBar>
 
-      <Container sx={{ px: 1, py: 4 }}>
-        <Stack spacing={2}>
-          <Stack spacing={2}>
+      <Container sx={{ px: 1, py: 2 }}>
+        <Stack
+          spacing={2}
+          sx={{
+            alignItems: "flex-end",
+          }}
+        >
+          <Stack spacing={2} sx={{ width: 1 }}>
             {items.map((item) => (
               <ItemRatio
                 key={item.id}
