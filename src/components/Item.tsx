@@ -8,46 +8,50 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useId, useState } from "react";
+import { useId } from "react";
 
 interface ItemProps {
-  ratio: null | number;
-  onInputsChange: (weightInput: string, priceInput: string) => void;
-  onRemove: () => void;
+  priceInput: string;
+  amountInput: string;
+  onRemoveItem: () => void;
+  onUpdateAmount: (amount: string) => void;
+  onUpdatePrice: (price: string) => void;
 }
 
-function Item({ ratio, onInputsChange, onRemove }: ItemProps) {
-  const [nameInput, setNameInput] = useState("");
-  const [weightInput, setWeightInput] = useState("");
-  const [priceInput, setPriceInput] = useState("");
-
+function Item({
+  priceInput,
+  amountInput,
+  onRemoveItem,
+  onUpdateAmount,
+  onUpdatePrice,
+}: ItemProps) {
   const nameInputId = useId();
   const weightInputId = useId();
   const priceInputId = useId();
   const ratioInputId = useId();
 
+  const getRatio = (): string => {
+    const price = Number(priceInput);
+    const amount = Number(amountInput);
+
+    if (isNaN(price) || isNaN(amount) || amount == 0) {
+      return "-";
+    }
+
+    return (price / amount).toString();
+  };
+
   return (
     <Card variant="outlined">
       <CardContent>
         <Stack direction={"column"} spacing={2}>
-          <TextField
-            fullWidth
-            value={nameInput}
-            onChange={(e) => {
-              setNameInput(e.target.value);
-            }}
-            id={nameInputId}
-            label="Nome do produto"
-          />
+          <TextField fullWidth id={nameInputId} label="Nome do produto" />
 
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
             <TextField
               fullWidth
-              value={weightInput}
-              onChange={(e) => {
-                setWeightInput(e.target.value);
-                onInputsChange(weightInput, priceInput);
-              }}
+              value={amountInput}
+              onChange={(e) => onUpdateAmount(e.target.value)}
               id={weightInputId}
               label="Peso (em quilos)"
               slotProps={{
@@ -62,10 +66,7 @@ function Item({ ratio, onInputsChange, onRemove }: ItemProps) {
             <TextField
               fullWidth
               value={priceInput}
-              onChange={(e) => {
-                setPriceInput(e.target.value);
-                onInputsChange(weightInput, priceInput);
-              }}
+              onChange={(e) => onUpdatePrice(e.target.value)}
               id={priceInputId}
               label="Preço"
               slotProps={{
@@ -80,7 +81,7 @@ function Item({ ratio, onInputsChange, onRemove }: ItemProps) {
 
           <TextField
             fullWidth
-            value={ratio === null ? "-" : ratio}
+            value={getRatio()}
             id={ratioInputId}
             disabled
             label="Preço por quilo"
@@ -97,7 +98,11 @@ function Item({ ratio, onInputsChange, onRemove }: ItemProps) {
           />
 
           <CardActions>
-            <Button onClick={onRemove} startIcon={<CloseIcon />} color="error">
+            <Button
+              onClick={onRemoveItem}
+              startIcon={<CloseIcon />}
+              color="error"
+            >
               Remover item
             </Button>
           </CardActions>
