@@ -1,19 +1,14 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, Stack } from "@mui/material";
 import { useReducer } from "react";
 import { v4 as uuid } from "uuid";
+import { Header } from "./components/Header";
 import { Item as ItemRatio } from "./components/Item";
 
 interface Item {
   id: string;
   priceInput: string;
   amountInput: string;
+  ratio: number | null;
 }
 
 type Action =
@@ -24,11 +19,30 @@ type Action =
   | { type: "CLEAR" };
 
 const getInitialItems = (): Item[] => [
-  { id: uuid(), priceInput: "", amountInput: "" },
+  { id: uuid(), priceInput: "", amountInput: "", ratio: null },
+  { id: uuid(), priceInput: "", amountInput: "", ratio: null },
 ];
+
+const getRatio = (priceInput: string, amountInput: string): number | null => {
+  const price = Number(priceInput);
+  const amount = Number(amountInput);
+
+  if (isNaN(price) || isNaN(amount) || amount == 0) {
+    return null;
+  }
+
+  return price / amount;
+};
 
 function App() {
   const [items, dispatch] = useReducer(itemsReducer, getInitialItems());
+
+  const sortedRatios = items
+    .filter((item) => item.ratio != null)
+    .sort((a, b) => a.ratio! - b.ratio!);
+
+  const betterRatio = sortedRatios[0]?.ratio ?? null;
+  const worstRatio = sortedRatios[sortedRatios.length - 1]?.ratio ?? null;
 
   function itemsReducer(state: Item[], action: Action): Item[] {
     switch (action.type) {
@@ -43,7 +57,11 @@ function App() {
       case "UPDATE_AMOUNT": {
         return state.map((item) =>
           item.id === action.payload.id
-            ? { ...item, amountInput: action.payload.amountInput }
+            ? {
+                ...item,
+                amountInput: action.payload.amountInput,
+                ratio: getRatio(item.priceInput, action.payload.amountInput),
+              }
             : item,
         );
       }
@@ -51,7 +69,11 @@ function App() {
       case "UPDATE_PRICE": {
         return state.map((item) =>
           item.id === action.payload.id
-            ? { ...item, priceInput: action.payload.priceInput }
+            ? {
+                ...item,
+                priceInput: action.payload.priceInput,
+                ratio: getRatio(action.payload.priceInput, item.amountInput),
+              }
             : item,
         );
       }
@@ -73,6 +95,7 @@ function App() {
         id: uuid(),
         priceInput: "",
         amountInput: "",
+        ratio: null,
       },
     });
   }
@@ -84,17 +107,17 @@ function App() {
     });
   }
 
-  function updateAmount(id: string, amount: string) {
+  function updateAmount(id: string, newAmount: string) {
     dispatch({
       type: "UPDATE_AMOUNT",
-      payload: { id, amountInput: amount },
+      payload: { id, amountInput: newAmount },
     });
   }
 
-  function updatePrice(id: string, price: string) {
+  function updatePrice(id: string, newPrice: string) {
     dispatch({
       type: "UPDATE_PRICE",
-      payload: { id, priceInput: price },
+      payload: { id, priceInput: newPrice },
     });
   }
 
@@ -104,27 +127,19 @@ function App() {
 
   return (
     <Box>
-      <AppBar position="sticky" sx={{ px: 2 }}>
-        <Stack direction={"row"} sx={{ height: 60, alignItems: "center" }}>
-          <Typography sx={{ fontSize: 20, fontWeight: 500 }}>
-            Comparador de Preços
-          </Typography>
-        </Stack>
-      </AppBar>
+      <Header />
 
       <Container sx={{ px: 1, py: 2 }}>
-        <Stack
-          spacing={2}
-          sx={{
-            alignItems: "flex-end",
-          }}
-        >
+        <Stack spacing={2} sx={{ alignItems: "flex-end" }}>
           <Stack spacing={2} sx={{ width: 1 }}>
             {items.map((item) => (
               <ItemRatio
                 key={item.id}
                 priceInput={item.priceInput}
                 amountInput={item.amountInput}
+                ratio={item.ratio}
+                betterRatio={betterRatio}
+                worstRatio={worstRatio}
                 onRemoveItem={() => {
                   removeItem(item.id);
                 }}

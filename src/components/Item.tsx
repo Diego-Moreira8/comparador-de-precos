@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardContent,
+  Chip,
   InputAdornment,
   Stack,
   TextField,
@@ -12,6 +13,9 @@ import { useId } from "react";
 interface ItemProps {
   priceInput: string;
   amountInput: string;
+  ratio: number | null;
+  betterRatio: number | null;
+  worstRatio: number | null;
   onRemoveItem: () => void;
   onUpdateAmount: (amount: string) => void;
   onUpdatePrice: (price: string) => void;
@@ -20,6 +24,9 @@ interface ItemProps {
 function Item({
   priceInput,
   amountInput,
+  ratio,
+  betterRatio,
+  worstRatio,
   onRemoveItem,
   onUpdateAmount,
   onUpdatePrice,
@@ -29,16 +36,8 @@ function Item({
   const priceInputId = useId();
   const ratioInputId = useId();
 
-  const getRatio = (): string => {
-    const price = Number(priceInput);
-    const amount = Number(amountInput);
-
-    if (isNaN(price) || isNaN(amount) || amount == 0) {
-      return "-";
-    }
-
-    return (price / amount).toString();
-  };
+  const isBetterRatio = ratio === betterRatio;
+  const isWorstRatio = ratio === worstRatio;
 
   return (
     <Card variant="outlined">
@@ -54,35 +53,20 @@ function Item({
               size="small"
               fullWidth
               id={nameInputId}
-              label="Nome do produto"
+              label="Descrição"
+              placeholder="Ex.: Frango, Sadia, Perdigão..."
             />
 
             <Stack direction="row" spacing={0.5}>
               <TextField
-                type="number"
-                size="small"
-                fullWidth
-                value={amountInput}
-                onChange={(e) => onUpdateAmount(e.target.value)}
-                id={weightInputId}
-                label="Peso"
-                slotProps={{
-                  input: {
-                    endAdornment: (
-                      <InputAdornment position="start">Kg</InputAdornment>
-                    ),
-                  },
-                }}
-              />
-
-              <TextField
-                type="number"
-                size="small"
-                fullWidth
-                value={priceInput}
                 onChange={(e) => onUpdatePrice(e.target.value)}
-                id={priceInputId}
+                value={priceInput}
                 label="Preço"
+                required
+                type="number"
+                id={priceInputId}
+                size="small"
+                fullWidth
                 slotProps={{
                   input: {
                     startAdornment: (
@@ -91,22 +75,51 @@ function Item({
                   },
                 }}
               />
+
+              <TextField
+                onChange={(e) => onUpdateAmount(e.target.value)}
+                value={amountInput}
+                label="Peso"
+                required
+                type="number"
+                id={weightInputId}
+                size="small"
+                fullWidth
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="start">Kg</InputAdornment>
+                    ),
+                  },
+                }}
+              />
             </Stack>
 
             <TextField
+              value={ratio || "-"}
+              label="Preço por quilo"
+              disabled
+              id={ratioInputId}
               size="small"
               fullWidth
-              value={getRatio()}
-              id={ratioInputId}
-              disabled
-              label="Preço por quilo"
               slotProps={{
                 input: {
                   startAdornment: (
                     <InputAdornment position="start">R$</InputAdornment>
                   ),
                   endAdornment: (
-                    <InputAdornment position="end">/Kg</InputAdornment>
+                    <Stack direction="row" spacing={0.75}>
+                      {isBetterRatio != isWorstRatio && isBetterRatio && (
+                        <Chip
+                          label="Melhor preço "
+                          color="success"
+                          size="small"
+                        />
+                      )}
+                      {isBetterRatio != isWorstRatio && isWorstRatio && (
+                        <Chip label="Pior preço " color="error" size="small" />
+                      )}
+                    </Stack>
                   ),
                 },
               }}
@@ -114,10 +127,10 @@ function Item({
           </Stack>
 
           <Button
-            size="small"
             onClick={onRemoveItem}
             startIcon={<CloseIcon />}
             color="error"
+            size="small"
           >
             Remover item
           </Button>
