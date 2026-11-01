@@ -1,8 +1,9 @@
-import { Box, Button, Container, Stack } from "@mui/material";
-import { useReducer } from "react";
+import { Box, Button, Container, Stack, Tooltip } from "@mui/material";
+import { useReducer, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Header } from "./components/Header";
 import { Item as ItemRatio } from "./components/Item";
+import type { Unit } from "./types";
 
 interface Item {
   id: string;
@@ -17,6 +18,14 @@ type Action =
   | { type: "UPDATE_AMOUNT"; payload: { id: string; amountInput: string } }
   | { type: "UPDATE_PRICE"; payload: { id: string; priceInput: string } }
   | { type: "CLEAR" };
+
+const units: Unit[] = [
+  { name: "Unidade", abbreviation: "UN" },
+  { name: "Quilograma", abbreviation: "KG" },
+  { name: "Grama", abbreviation: "G" },
+  { name: "Litro", abbreviation: "L" },
+  { name: "Mililitro", abbreviation: "ML" },
+];
 
 const getInitialItems = (): Item[] => [
   { id: uuid(), priceInput: "", amountInput: "", ratio: null },
@@ -35,6 +44,7 @@ const getRatio = (priceInput: string, amountInput: string): number | null => {
 };
 
 function App() {
+  const [unit, setUnit] = useState<Unit>(units[0]);
   const [items, dispatch] = useReducer(itemsReducer, getInitialItems());
 
   const sortedRatios = items
@@ -131,10 +141,28 @@ function App() {
 
       <Container sx={{ px: 1, py: 2 }}>
         <Stack spacing={2} sx={{ alignItems: "flex-end" }}>
+          <Stack
+            spacing={0.5}
+            direction={"row"}
+            sx={{ width: 1, justifyContent: "center" }}
+          >
+            {units.map((u) => (
+              <Tooltip key={u.name} title={u.name}>
+                <Button
+                  onClick={() => setUnit(u)}
+                  variant={u === unit ? "contained" : "outlined"}
+                >
+                  {u.abbreviation}
+                </Button>
+              </Tooltip>
+            ))}
+          </Stack>
+
           <Stack spacing={2} sx={{ width: 1 }}>
             {items.map((item) => (
               <ItemRatio
                 key={item.id}
+                unit={unit}
                 priceInput={item.priceInput}
                 amountInput={item.amountInput}
                 ratio={item.ratio}
@@ -154,12 +182,12 @@ function App() {
           </Stack>
 
           <Stack spacing={1} direction={"row"}>
-            <Button onClick={addItem} variant="contained">
-              Adicionar item
-            </Button>
-
             <Button onClick={clear} color="error" variant="contained">
               Reiniciar
+            </Button>
+
+            <Button onClick={addItem} variant="contained">
+              Adicionar item
             </Button>
           </Stack>
         </Stack>
