@@ -10,7 +10,7 @@ import {
 import { useId } from "react";
 import type { Unit } from "../types";
 
-interface ItemProps {
+interface CommonItemProps {
   unit: Unit;
   priceInput: string;
   amountInput: string;
@@ -22,7 +22,7 @@ interface ItemProps {
   onUpdatePrice: (price: string) => void;
 }
 
-function Item({
+function CommonItem({
   unit,
   priceInput,
   amountInput,
@@ -32,7 +32,7 @@ function Item({
   onRemoveItem,
   onUpdateAmount,
   onUpdatePrice,
-}: ItemProps) {
+}: CommonItemProps) {
   const nameInputId = useId();
   const priceInputId = useId();
   const amountInputId = useId();
@@ -145,4 +145,4 @@ function Item({
   );
 }
 
-export { Item };
+export { CommonItem };
