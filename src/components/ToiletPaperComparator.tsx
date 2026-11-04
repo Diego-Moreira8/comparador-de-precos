@@ -1,21 +1,13 @@
 import { Button, Container, Stack } from "@mui/material";
 import { useReducer } from "react";
 import { v4 as uuid } from "uuid";
-import { ToiletPaper } from "./ToiletPaperItem";
-
-interface ToiletPaper {
-  id: string;
-  priceInput: string;
-  rollCountInput: string;
-  rollLengthInput: string;
-  totalLength: number | null;
-  ratio: number | null;
-}
+import type { ToiletPaper as ToiletPaperType } from "../types";
+import { ToiletPaper as ToiletPaperComponent } from "./ToiletPaperItem";
 
 type Action =
   | {
       type: "ADD_ITEM";
-      payload: ToiletPaper;
+      payload: ToiletPaperType;
     }
   | {
       type: "REMOVE_ITEM";
@@ -37,7 +29,7 @@ type Action =
       type: "CLEAR";
     };
 
-const getInitialItems = (): ToiletPaper[] => [
+const getInitialItems = (): ToiletPaperType[] => [
   {
     id: uuid(),
     priceInput: "",
@@ -91,7 +83,10 @@ function ToiletPaperComparator() {
   const betterRatio = sortedRatios[0]?.ratio ?? null;
   const worstRatio = sortedRatios[sortedRatios.length - 1]?.ratio ?? null;
 
-  function itemsReducer(state: ToiletPaper[], action: Action): ToiletPaper[] {
+  function itemsReducer(
+    state: ToiletPaperType[],
+    action: Action,
+  ): ToiletPaperType[] {
     switch (action.type) {
       case "ADD_ITEM": {
         return [...state, action.payload];
@@ -210,13 +205,10 @@ function ToiletPaperComparator() {
       <Stack spacing={2} sx={{ alignItems: "flex-end" }}>
         <Stack spacing={2} sx={{ width: 1 }}>
           {items.map((item) => (
-            <ToiletPaper
+            <ToiletPaperComponent
               key={item.id}
               priceInput={item.priceInput}
-              rollCountInput={item.rollCountInput}
-              rollLengthInput={item.rollLengthInput}
-              totalLength={item.totalLength}
-              ratio={item.ratio}
+              item={item}
               betterRatio={betterRatio}
               worstRatio={worstRatio}
               onRemoveItem={() => {

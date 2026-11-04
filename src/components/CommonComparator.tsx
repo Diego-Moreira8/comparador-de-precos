@@ -1,24 +1,17 @@
 import { Button, Container, Stack, Tooltip } from "@mui/material";
 import { useReducer, useState } from "react";
 import { v4 as uuid } from "uuid";
-import type { Unit } from "../types";
-import { CommonItem } from "./CommonItem";
-
-interface CommonItem {
-  id: string;
-  priceInput: string;
-  amountInput: string;
-  ratio: number | null;
-}
+import type { CommonItem as CommonItemType, Unit } from "../types";
+import { CommonItem as CommonItemComponent } from "./CommonItem";
 
 type Action =
-  | { type: "ADD_ITEM"; payload: CommonItem }
+  | { type: "ADD_ITEM"; payload: CommonItemType }
   | { type: "REMOVE_ITEM"; payload: { id: string } }
   | { type: "UPDATE_AMOUNT"; payload: { id: string; amountInput: string } }
   | { type: "UPDATE_PRICE"; payload: { id: string; priceInput: string } }
   | { type: "CLEAR" };
 
-const getInitialItems = (): CommonItem[] => [
+const getInitialItems = (): CommonItemType[] => [
   { id: uuid(), priceInput: "", amountInput: "", ratio: null },
   { id: uuid(), priceInput: "", amountInput: "", ratio: null },
 ];
@@ -53,7 +46,10 @@ function CommonComparator() {
   const betterRatio = sortedRatios[0]?.ratio ?? null;
   const worstRatio = sortedRatios[sortedRatios.length - 1]?.ratio ?? null;
 
-  function itemsReducer(state: CommonItem[], action: Action): CommonItem[] {
+  function itemsReducer(
+    state: CommonItemType[],
+    action: Action,
+  ): CommonItemType[] {
     switch (action.type) {
       case "ADD_ITEM": {
         return [...state, action.payload];
@@ -157,12 +153,10 @@ function CommonComparator() {
 
         <Stack spacing={2} sx={{ width: 1 }}>
           {items.map((item) => (
-            <CommonItem
+            <CommonItemComponent
               key={item.id}
               unit={unit}
-              priceInput={item.priceInput}
-              amountInput={item.amountInput}
-              ratio={item.ratio}
+              item={item}
               betterRatio={betterRatio}
               worstRatio={worstRatio}
               onRemoveItem={() => {

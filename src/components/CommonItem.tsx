@@ -8,13 +8,11 @@ import {
   TextField,
 } from "@mui/material";
 import { useId } from "react";
-import type { Unit } from "../types";
+import type { CommonItem as CommonItemType, Unit } from "../types";
 
 interface CommonItemProps {
   unit: Unit;
-  priceInput: string;
-  amountInput: string;
-  ratio: number | null;
+  item: CommonItemType;
   betterRatio: number | null;
   worstRatio: number | null;
   onRemoveItem: () => void;
@@ -24,9 +22,7 @@ interface CommonItemProps {
 
 function CommonItem({
   unit,
-  priceInput,
-  amountInput,
-  ratio,
+  item,
   betterRatio,
   worstRatio,
   onRemoveItem,
@@ -38,8 +34,8 @@ function CommonItem({
   const amountInputId = useId();
   const ratioInputId = useId();
 
-  const isBetterRatio = ratio === betterRatio;
-  const isWorstRatio = ratio === worstRatio;
+  const isBetterRatio = item.ratio === betterRatio;
+  const isWorstRatio = item.ratio === worstRatio;
 
   return (
     <Paper variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
@@ -62,7 +58,7 @@ function CommonItem({
           <Stack direction="row" spacing={0.5}>
             <TextField
               onChange={(e) => onUpdatePrice(e.target.value)}
-              value={priceInput}
+              value={item.priceInput}
               label="Preço"
               autoComplete="off"
               required
@@ -81,7 +77,7 @@ function CommonItem({
 
             <TextField
               onChange={(e) => onUpdateAmount(e.target.value)}
-              value={amountInput}
+              value={item.amountInput}
               label="Quantidade"
               autoComplete="off"
               required
@@ -102,7 +98,7 @@ function CommonItem({
           </Stack>
 
           <TextField
-            value={ratio || "-"}
+            value={item.ratio || "-"}
             label={`Preço por ${unit.name.toLocaleLowerCase()}`}
             disabled
             id={ratioInputId}

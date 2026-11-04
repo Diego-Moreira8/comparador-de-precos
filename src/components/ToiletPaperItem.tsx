@@ -8,13 +8,11 @@ import {
   TextField,
 } from "@mui/material";
 import { useId } from "react";
+import type { ToiletPaper as ToiletPaperType } from "../types";
 
 interface ToiletPaperProps {
   priceInput: string;
-  rollCountInput: string;
-  rollLengthInput: string;
-  totalLength: number | null;
-  ratio: number | null;
+  item: ToiletPaperType;
   betterRatio: number | null;
   worstRatio: number | null;
   onRemoveItem: () => void;
@@ -25,10 +23,7 @@ interface ToiletPaperProps {
 
 function ToiletPaper({
   priceInput,
-  rollCountInput,
-  rollLengthInput,
-  totalLength,
-  ratio,
+  item,
   betterRatio,
   worstRatio,
   onRemoveItem,
@@ -43,8 +38,8 @@ function ToiletPaper({
   const totalLengthInputId = useId();
   const ratioInputId = useId();
 
-  const isBetterRatio = ratio === betterRatio;
-  const isWorstRatio = ratio === worstRatio;
+  const isBetterRatio = item.ratio === betterRatio;
+  const isWorstRatio = item.ratio === worstRatio;
 
   return (
     <Paper variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
@@ -85,7 +80,7 @@ function ToiletPaper({
 
           <TextField
             onChange={(e) => onUpdateRollCount(e.target.value)}
-            value={rollCountInput}
+            value={item.rollCountInput}
             label="Quantidade de rolos"
             autoComplete="off"
             required
@@ -104,7 +99,7 @@ function ToiletPaper({
 
           <TextField
             onChange={(e) => onUpdateRollLength(e.target.value)}
-            value={rollLengthInput}
+            value={item.rollLengthInput}
             label="Comprimento do rolo"
             autoComplete="off"
             required
@@ -122,7 +117,7 @@ function ToiletPaper({
           />
 
           <TextField
-            value={totalLength || "-"}
+            value={item.totalLength || "-"}
             label={"Quantidade total"}
             disabled
             id={totalLengthInputId}
@@ -136,7 +131,7 @@ function ToiletPaper({
           />
 
           <TextField
-            value={ratio || "-"}
+            value={item.ratio || "-"}
             label={`Preço por metro`}
             disabled
             id={ratioInputId}
