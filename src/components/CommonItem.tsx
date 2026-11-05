@@ -55,47 +55,45 @@ function CommonItem({
             autoComplete="off"
           />
 
-          <Stack direction="row" spacing={0.5}>
-            <TextField
-              onChange={(e) => onUpdatePrice(e.target.value)}
-              value={item.priceInput}
-              label="Preço"
-              autoComplete="off"
-              required
-              type="number"
-              id={priceInputId}
-              size="small"
-              fullWidth
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">R$</InputAdornment>
-                  ),
-                },
-              }}
-            />
+          <TextField
+            onChange={(e) => onUpdatePrice(e.target.value)}
+            value={item.priceInput}
+            label="Preço"
+            autoComplete="off"
+            required
+            type="number"
+            id={priceInputId}
+            size="small"
+            fullWidth
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">R$</InputAdornment>
+                ),
+              },
+            }}
+          />
 
-            <TextField
-              onChange={(e) => onUpdateAmount(e.target.value)}
-              value={item.amountInput}
-              label="Quantidade"
-              autoComplete="off"
-              required
-              type="number"
-              id={amountInputId}
-              size="small"
-              fullWidth
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="start">
-                      {unit.abbreviation}
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
-          </Stack>
+          <TextField
+            onChange={(e) => onUpdateAmount(e.target.value)}
+            value={item.amountInput}
+            label="Quantidade"
+            autoComplete="off"
+            required
+            type="number"
+            id={amountInputId}
+            size="small"
+            fullWidth
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="start">
+                    {unit.abbreviation}
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
 
           <TextField
             value={item.ratio || "-"}

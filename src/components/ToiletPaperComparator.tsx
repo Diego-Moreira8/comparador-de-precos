@@ -1,5 +1,7 @@
 import { Button, Container, Stack } from "@mui/material";
 import { useReducer } from "react";
+import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { v4 as uuid } from "uuid";
 import type { ToiletPaper as ToiletPaperType } from "../types";
 import { ToiletPaper as ToiletPaperComponent } from "./ToiletPaperItem";
@@ -202,32 +204,34 @@ function ToiletPaperComparator() {
 
   return (
     <Container sx={{ px: 1, py: 2 }}>
-      <Stack spacing={2} sx={{ alignItems: "flex-end" }}>
-        <Stack spacing={2} sx={{ width: 1 }}>
+      <Stack spacing={2}>
+        <Swiper spaceBetween={50} slidesPerView={1}>
           {items.map((item) => (
-            <ToiletPaperComponent
-              key={item.id}
-              priceInput={item.priceInput}
-              item={item}
-              betterRatio={betterRatio}
-              worstRatio={worstRatio}
-              onRemoveItem={() => {
-                removeItem(item.id);
-              }}
-              onUpdateRollCount={(newRollCount: string) => {
-                updateRollCount(item.id, newRollCount);
-              }}
-              onUpdateRollLength={(newRollLength: string) => {
-                updateRollLength(item.id, newRollLength);
-              }}
-              onUpdatePrice={(newPrice: string) => {
-                updatePrice(item.id, newPrice);
-              }}
-            />
+            <SwiperSlide>
+              <ToiletPaperComponent
+                key={item.id}
+                priceInput={item.priceInput}
+                item={item}
+                betterRatio={betterRatio}
+                worstRatio={worstRatio}
+                onRemoveItem={() => {
+                  removeItem(item.id);
+                }}
+                onUpdateRollCount={(newRollCount: string) => {
+                  updateRollCount(item.id, newRollCount);
+                }}
+                onUpdateRollLength={(newRollLength: string) => {
+                  updateRollLength(item.id, newRollLength);
+                }}
+                onUpdatePrice={(newPrice: string) => {
+                  updatePrice(item.id, newPrice);
+                }}
+              />
+            </SwiperSlide>
           ))}
-        </Stack>
+        </Swiper>
 
-        <Stack spacing={1} direction={"row"}>
+        <Stack spacing={1} direction={"row"} sx={{ justifyContent: "end" }}>
           <Button onClick={clear} color="error" variant="contained">
             Reiniciar
           </Button>

@@ -1,5 +1,7 @@
 import { Button, Container, Stack, Tooltip } from "@mui/material";
 import { useReducer, useState } from "react";
+import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { v4 as uuid } from "uuid";
 import type { CommonItem as CommonItemType, Unit } from "../types";
 import { CommonItem as CommonItemComponent } from "./CommonItem";
@@ -132,7 +134,7 @@ function CommonComparator() {
 
   return (
     <Container sx={{ px: 1, py: 2 }}>
-      <Stack spacing={2} sx={{ alignItems: "flex-end" }}>
+      <Stack spacing={2}>
         <Stack
           spacing={0.5}
           direction={"row"}
@@ -151,28 +153,30 @@ function CommonComparator() {
           ))}
         </Stack>
 
-        <Stack spacing={2} sx={{ width: 1 }}>
+        <Swiper spaceBetween={50} slidesPerView={1}>
           {items.map((item) => (
-            <CommonItemComponent
-              key={item.id}
-              unit={unit}
-              item={item}
-              betterRatio={betterRatio}
-              worstRatio={worstRatio}
-              onRemoveItem={() => {
-                removeItem(item.id);
-              }}
-              onUpdateAmount={(newAmount: string) => {
-                updateAmount(item.id, newAmount);
-              }}
-              onUpdatePrice={(newPrice: string) => {
-                updatePrice(item.id, newPrice);
-              }}
-            />
+            <SwiperSlide>
+              <CommonItemComponent
+                key={item.id}
+                unit={unit}
+                item={item}
+                betterRatio={betterRatio}
+                worstRatio={worstRatio}
+                onRemoveItem={() => {
+                  removeItem(item.id);
+                }}
+                onUpdateAmount={(newAmount: string) => {
+                  updateAmount(item.id, newAmount);
+                }}
+                onUpdatePrice={(newPrice: string) => {
+                  updatePrice(item.id, newPrice);
+                }}
+              />
+            </SwiperSlide>
           ))}
-        </Stack>
+        </Swiper>
 
-        <Stack spacing={1} direction={"row"}>
+        <Stack spacing={1} direction={"row"} sx={{ justifyContent: "end" }}>
           <Button onClick={clear} color="error" variant="contained">
             Reiniciar
           </Button>

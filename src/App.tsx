@@ -29,8 +29,9 @@ function App() {
         direction={"row"}
         sx={{ width: 1, justifyContent: "center" }}
       >
-        {comparators.map((c) => (
+        {comparators.map((c, index) => (
           <Button
+            key={index}
             onClick={() => setComparator(c.variant)}
             variant={c.variant === comparator ? "contained" : "outlined"}
           >
