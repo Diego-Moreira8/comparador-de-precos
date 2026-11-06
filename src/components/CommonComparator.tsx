@@ -1,6 +1,8 @@
-import { Button, Container, Stack, Tooltip } from "@mui/material";
+import { Box, Button, Container, Stack, Tooltip } from "@mui/material";
 import { useReducer, useState } from "react";
 import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { v4 as uuid } from "uuid";
 import type { CommonItem as CommonItemType, Unit } from "../types";
@@ -153,25 +155,32 @@ function CommonComparator() {
           ))}
         </Stack>
 
-        <Swiper spaceBetween={50} slidesPerView={1}>
+        <Swiper
+          spaceBetween={50}
+          slidesPerView={1}
+          modules={[Pagination]}
+          pagination={{ clickable: true }}
+        >
           {items.map((item) => (
             <SwiperSlide>
-              <CommonItemComponent
-                key={item.id}
-                unit={unit}
-                item={item}
-                betterRatio={betterRatio}
-                worstRatio={worstRatio}
-                onRemoveItem={() => {
-                  removeItem(item.id);
-                }}
-                onUpdateAmount={(newAmount: string) => {
-                  updateAmount(item.id, newAmount);
-                }}
-                onUpdatePrice={(newPrice: string) => {
-                  updatePrice(item.id, newPrice);
-                }}
-              />
+              <Box sx={{ mb: 4 }}>
+                <CommonItemComponent
+                  key={item.id}
+                  unit={unit}
+                  item={item}
+                  betterRatio={betterRatio}
+                  worstRatio={worstRatio}
+                  onRemoveItem={() => {
+                    removeItem(item.id);
+                  }}
+                  onUpdateAmount={(newAmount: string) => {
+                    updateAmount(item.id, newAmount);
+                  }}
+                  onUpdatePrice={(newPrice: string) => {
+                    updatePrice(item.id, newPrice);
+                  }}
+                />
+              </Box>
             </SwiperSlide>
           ))}
         </Swiper>

@@ -1,6 +1,8 @@
-import { Button, Container, Stack } from "@mui/material";
+import { Box, Button, Container, Stack } from "@mui/material";
 import { useReducer } from "react";
 import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { v4 as uuid } from "uuid";
 import type { ToiletPaper as ToiletPaperType } from "../types";
@@ -50,7 +52,6 @@ const getInitialItems = (): ToiletPaperType[] => [
   },
 ];
 
-// TODO: Retornar total no pacote
 const getRatioAndTotalLength = (
   priceInput: string,
   rollCountInput: string,
@@ -205,28 +206,35 @@ function ToiletPaperComparator() {
   return (
     <Container sx={{ px: 1, py: 2 }}>
       <Stack spacing={2}>
-        <Swiper spaceBetween={50} slidesPerView={1}>
+        <Swiper
+          spaceBetween={50}
+          slidesPerView={1}
+          modules={[Pagination]}
+          pagination={{ clickable: true }}
+        >
           {items.map((item) => (
             <SwiperSlide>
-              <ToiletPaperComponent
-                key={item.id}
-                priceInput={item.priceInput}
-                item={item}
-                betterRatio={betterRatio}
-                worstRatio={worstRatio}
-                onRemoveItem={() => {
-                  removeItem(item.id);
-                }}
-                onUpdateRollCount={(newRollCount: string) => {
-                  updateRollCount(item.id, newRollCount);
-                }}
-                onUpdateRollLength={(newRollLength: string) => {
-                  updateRollLength(item.id, newRollLength);
-                }}
-                onUpdatePrice={(newPrice: string) => {
-                  updatePrice(item.id, newPrice);
-                }}
-              />
+              <Box sx={{ mb: 4 }}>
+                <ToiletPaperComponent
+                  key={item.id}
+                  priceInput={item.priceInput}
+                  item={item}
+                  betterRatio={betterRatio}
+                  worstRatio={worstRatio}
+                  onRemoveItem={() => {
+                    removeItem(item.id);
+                  }}
+                  onUpdateRollCount={(newRollCount: string) => {
+                    updateRollCount(item.id, newRollCount);
+                  }}
+                  onUpdateRollLength={(newRollLength: string) => {
+                    updateRollLength(item.id, newRollLength);
+                  }}
+                  onUpdatePrice={(newPrice: string) => {
+                    updatePrice(item.id, newPrice);
+                  }}
+                />
+              </Box>
             </SwiperSlide>
           ))}
         </Swiper>
