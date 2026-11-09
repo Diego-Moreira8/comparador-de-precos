@@ -1,3 +1,4 @@
+import { formatBrazilianCurrencyInput } from "@/lib/currency";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Button,
@@ -51,12 +52,14 @@ function ToiletPaperItem({
             autoComplete="off"
           />
           <TextField
-            onChange={(e) => onUpdatePrice(e.target.value)}
+            onChange={(e) =>
+              onUpdatePrice(formatBrazilianCurrencyInput(e.target.value))
+            }
             value={item.priceInput}
             label="Preço"
             autoComplete="off"
             required
-            type="number"
+            inputMode="decimal"
             id={priceInputId}
             size="small"
             fullWidth

@@ -15,8 +15,8 @@ type Action =
   | { type: "CLEAR" };
 
 const getInitialItems = (): CommonProductItem[] => [
-  { id: uuid(), priceInput: "", amountInput: "", ratio: null },
-  { id: uuid(), priceInput: "", amountInput: "", ratio: null },
+  { id: uuid(), priceInput: "0,00", amountInput: "", ratio: null },
+  { id: uuid(), priceInput: "0,00", amountInput: "", ratio: null },
 ];
 
 function itemsReducer(
@@ -68,7 +68,7 @@ function CommonProductComparator() {
   const addItem = () =>
     dispatch({
       type: "ADD_ITEM",
-      payload: { id: uuid(), priceInput: "", amountInput: "", ratio: null },
+      payload: { id: uuid(), priceInput: "0,00", amountInput: "", ratio: null },
     });
 
   return (

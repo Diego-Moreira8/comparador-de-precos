@@ -1,3 +1,5 @@
+import { parseBrazilianCurrencyInput } from "@/lib/currency";
+
 interface ToiletPaperCalculation {
   ratio: number;
   totalLength: number;
@@ -8,7 +10,7 @@ export function getToiletPaperCalculation(
   rollCountInput: string,
   rollLengthInput: string,
 ): ToiletPaperCalculation | null {
-  const price = Number(priceInput);
+  const price = parseBrazilianCurrencyInput(priceInput);
   const rollCount = Number(rollCountInput);
   const rollLength = Number(rollLengthInput);
 

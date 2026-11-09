@@ -24,7 +24,7 @@ type Action =
 const getInitialItems = (): ToiletPaperItemType[] => [
   {
     id: uuid(),
-    priceInput: "",
+    priceInput: "0,00",
     rollCountInput: "",
     rollLengthInput: "",
     totalLength: null,
@@ -32,7 +32,7 @@ const getInitialItems = (): ToiletPaperItemType[] => [
   },
   {
     id: uuid(),
-    priceInput: "",
+    priceInput: "0,00",
     rollCountInput: "",
     rollLengthInput: "",
     totalLength: null,
@@ -106,7 +106,7 @@ function ToiletPaperComparator() {
       type: "ADD_ITEM",
       payload: {
         id: uuid(),
-        priceInput: "",
+        priceInput: "0,00",
         rollCountInput: "",
         rollLengthInput: "",
         totalLength: null,
