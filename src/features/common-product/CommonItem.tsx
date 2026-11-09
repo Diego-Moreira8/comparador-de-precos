@@ -8,34 +8,30 @@ import {
   TextField,
 } from "@mui/material";
 import { useId } from "react";
-import type { ToiletPaper as ToiletPaperType } from "../types";
+import type { CommonProductItem, Unit } from "./model";
 
-interface ToiletPaperProps {
-  priceInput: string;
-  item: ToiletPaperType;
+interface CommonItemProps {
+  unit: Unit;
+  item: CommonProductItem;
   betterRatio: number | null;
   worstRatio: number | null;
   onRemoveItem: () => void;
-  onUpdateRollLength: (amount: string) => void;
-  onUpdateRollCount: (amount: string) => void;
+  onUpdateAmount: (amount: string) => void;
   onUpdatePrice: (price: string) => void;
 }
 
-function ToiletPaper({
-  priceInput,
+function CommonItem({
+  unit,
   item,
   betterRatio,
   worstRatio,
   onRemoveItem,
-  onUpdateRollCount,
-  onUpdateRollLength,
+  onUpdateAmount,
   onUpdatePrice,
-}: ToiletPaperProps) {
+}: CommonItemProps) {
   const nameInputId = useId();
   const priceInputId = useId();
-  const rollCountInputId = useId();
-  const rollLengthInputId = useId();
-  const totalLengthInputId = useId();
+  const amountInputId = useId();
   const ratioInputId = useId();
 
   const isBetterRatio = item.ratio === betterRatio;
@@ -43,25 +39,19 @@ function ToiletPaper({
 
   return (
     <Paper variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
-      <Stack
-        spacing={1}
-        sx={{
-          alignItems: "flex-end",
-        }}
-      >
-        <Stack direction={"column"} spacing={1.5} sx={{ width: 1 }}>
+      <Stack spacing={1} sx={{ alignItems: "flex-end" }}>
+        <Stack direction="column" spacing={1.5} sx={{ width: 1 }}>
           <TextField
             size="small"
             fullWidth
             id={nameInputId}
-            label="Marca"
-            placeholder="Ex.: Paloma, Neve, Personal..."
+            label="Descrição"
+            placeholder="Ex.: Frango, Sadia, Perdigão..."
             autoComplete="off"
           />
-
           <TextField
             onChange={(e) => onUpdatePrice(e.target.value)}
-            value={priceInput}
+            value={item.priceInput}
             label="Preço"
             autoComplete="off"
             required
@@ -77,62 +67,29 @@ function ToiletPaper({
               },
             }}
           />
-
           <TextField
-            onChange={(e) => onUpdateRollCount(e.target.value)}
-            value={item.rollCountInput}
-            label="Quantidade de rolos"
+            onChange={(e) => onUpdateAmount(e.target.value)}
+            value={item.amountInput}
+            label="Quantidade"
             autoComplete="off"
             required
             type="number"
-            id={rollCountInputId}
+            id={amountInputId}
             size="small"
             fullWidth
             slotProps={{
               input: {
                 endAdornment: (
-                  <InputAdornment position="start">rolos</InputAdornment>
+                  <InputAdornment position="start">
+                    {unit.abbreviation}
+                  </InputAdornment>
                 ),
               },
             }}
           />
-
-          <TextField
-            onChange={(e) => onUpdateRollLength(e.target.value)}
-            value={item.rollLengthInput}
-            label="Comprimento do rolo"
-            autoComplete="off"
-            required
-            type="number"
-            id={rollLengthInputId}
-            size="small"
-            fullWidth
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="start">m/rolo</InputAdornment>
-                ),
-              },
-            }}
-          />
-
-          <TextField
-            value={item.totalLength || "-"}
-            label={"Quantidade total"}
-            disabled
-            id={totalLengthInputId}
-            size="small"
-            fullWidth
-            slotProps={{
-              input: {
-                endAdornment: <InputAdornment position="end">m</InputAdornment>,
-              },
-            }}
-          />
-
           <TextField
             value={item.ratio || "-"}
-            label={`Preço por metro`}
+            label={`Preço por ${unit.name.toLocaleLowerCase()}`}
             disabled
             id={ratioInputId}
             size="small"
@@ -145,10 +102,14 @@ function ToiletPaper({
                 endAdornment: (
                   <Stack direction="row" spacing={0.75}>
                     {isBetterRatio != isWorstRatio && isBetterRatio && (
-                      <Chip label="Melhor preço" color="success" size="small" />
+                      <Chip
+                        label="Melhor preço "
+                        color="success"
+                        size="small"
+                      />
                     )}
                     {isBetterRatio != isWorstRatio && isWorstRatio && (
-                      <Chip label="Pior preço" color="error" size="small" />
+                      <Chip label="Pior preço " color="error" size="small" />
                     )}
                   </Stack>
                 ),
@@ -156,7 +117,6 @@ function ToiletPaper({
             }}
           />
         </Stack>
-
         <Button
           onClick={onRemoveItem}
           startIcon={<CloseIcon />}
@@ -170,4 +130,4 @@ function ToiletPaper({
   );
 }
 
-export { ToiletPaper };
+export { CommonItem };
