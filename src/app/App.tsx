@@ -1,6 +1,6 @@
+import { Header } from "@/components/layout/Header";
 import { Box, Button, Stack } from "@mui/material";
 import { useState } from "react";
-import { Header } from "../components/layout/Header";
 import { comparators, type ComparatorId } from "./comparators";
 
 function App() {

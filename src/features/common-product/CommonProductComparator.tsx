@@ -1,8 +1,8 @@
+import { ComparatorCarousel } from "@/components/ui/ComparatorCarousel";
+import { getComparisonRatios } from "@/features/comparison/utils";
 import { Button, Container, Stack, Tooltip } from "@mui/material";
 import { useReducer, useState } from "react";
 import { v4 as uuid } from "uuid";
-import { ComparatorCarousel } from "../../components/ui/ComparatorCarousel";
-import { getComparisonRatios } from "../comparison/utils";
 import { getCommonProductRatio } from "./calculator";
 import { CommonItem } from "./CommonItem";
 import { type CommonProductItem, type Unit, units } from "./model";

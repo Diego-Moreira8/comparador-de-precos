@@ -1,4 +1,4 @@
-import type { ComparableItem } from "../comparison/types";
+import type { ComparableItem } from "@/features/comparison/types";
 
 export interface ToiletPaperItem extends ComparableItem {
   priceInput: string;

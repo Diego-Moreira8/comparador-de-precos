@@ -1,6 +1,6 @@
+import { CommonProductComparator } from "@/features/common-product/CommonProductComparator";
+import { ToiletPaperComparator } from "@/features/toilet-paper/ToiletPaperComparator";
 import type { ComponentType } from "react";
-import { CommonProductComparator } from "../features/common-product/CommonProductComparator";
-import { ToiletPaperComparator } from "../features/toilet-paper/ToiletPaperComparator";
 
 export type ComparatorId = "common" | "toiletPaper";
 

@@ -1,8 +1,8 @@
+import { ComparatorCarousel } from "@/components/ui/ComparatorCarousel";
+import { getComparisonRatios } from "@/features/comparison/utils";
 import { Button, Container, Stack } from "@mui/material";
 import { useReducer } from "react";
 import { v4 as uuid } from "uuid";
-import { ComparatorCarousel } from "../../components/ui/ComparatorCarousel";
-import { getComparisonRatios } from "../comparison/utils";
 import { getToiletPaperCalculation } from "./calculator";
 import { type ToiletPaperItem as ToiletPaperItemType } from "./model";
 import { ToiletPaperItem } from "./ToiletPaperItem";
